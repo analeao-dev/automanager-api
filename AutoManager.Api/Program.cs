@@ -1,4 +1,5 @@
 using AutoManager.Api.Data;
+using AutoManager.Api.Endpoints;
 using AutoManager.Api.Services;
 using AutoManager.Core.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/automanager", () => "AutoManager");
+app.MapEndpoints();
 
 app.Run();
