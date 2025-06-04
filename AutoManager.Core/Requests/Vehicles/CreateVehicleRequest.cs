@@ -15,11 +15,12 @@ public class CreateVehicleRequest
     
     [Required(ErrorMessage = "Modelo do veículo é obrigatório")]
     public required string Model { get; set; }
-
-    [Required(ErrorMessage = "Ano do veículo inválido")]
+    
+    [Required(ErrorMessage = "Ano do veículo é obrigatório")]
+    [Range(1886, 2100, ErrorMessage = "Ano inválido para um veículo.")]
     public int Year { get; set; }
 
-    [Required(ErrorMessage = "Quilometragem do veículo inválida")]
+    [Required(ErrorMessage = "Quilometragem do veículo é obrigatório")]
     public int Mileage { get; set; }
 
     public string? Image { get; set; }
