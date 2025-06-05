@@ -15,7 +15,7 @@ public class GetAllVehiclesEndpoint : IEndpoint
             .WithName("Vehicles: GetAll")
             .WithSummary("Lista todos os veículos")
             .WithDescription("Lista todos os veículos de forma paginada")
-            .WithOrder(5)
+            .WithOrder(4)
             .Produces<PagedResponse<List<Vehicle>?>>();
 
     private static async Task<IResult> HandleAsync(

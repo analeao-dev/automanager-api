@@ -13,7 +13,7 @@ public class GetVehicleByIdEndpoint : IEndpoint
             .WithName("Vehicles: GetById")
             .WithSummary("Retorna um veículo por Id")
             .WithDescription("Retorna um veículo por Id")
-            .WithOrder(2)
+            .WithOrder(3)
             .Produces<Response<Vehicle?>>();
 
     private static async Task<IResult> HandleAsync(IVehicleService handler, int id)

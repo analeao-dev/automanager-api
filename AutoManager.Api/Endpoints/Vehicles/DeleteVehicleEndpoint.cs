@@ -13,7 +13,7 @@ public class DeleteVehicleEndpoint : IEndpoint
             .WithName("Vehicles: Delete")
             .WithSummary("Exclui um veículo")
             .WithDescription("Exclui veículo")
-            .WithOrder(3)
+            .WithOrder(5)
             .Produces<Response<Vehicle?>>();
 
     private static async Task<IResult> HandleAsync(IVehicleService handler, int id)
