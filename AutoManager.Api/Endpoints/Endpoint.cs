@@ -16,9 +16,10 @@ public static class Endpoint
         endpoints.MapGroup("/api/v1/vehicles")
             .WithTags("Vehicles")
             .MapEndpoint<CreateVehicleEndpoint>()
-            .MapEndpoint<DeleteVehicleEndpoint>()
-            .MapEndpoint<GetAllVehiclesEndpoint>()
+            .MapEndpoint<UpdateVehicleEndpoint>()
             .MapEndpoint<GetVehicleByIdEndpoint>()
+            .MapEndpoint<GetAllVehiclesEndpoint>()
+            .MapEndpoint<DeleteVehicleEndpoint>()
             .MapEndpoint<GetVehicleByPlateEndpoint>();
     }
 
