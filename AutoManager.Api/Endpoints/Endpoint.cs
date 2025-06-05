@@ -17,7 +17,8 @@ public static class Endpoint
             .WithTags("Vehicles")
             .MapEndpoint<CreateVehicleEndpoint>()
             .MapEndpoint<DeleteVehicleEndpoint>()
-            .MapEndpoint<GetAllVehiclesEndpoint>();
+            .MapEndpoint<GetAllVehiclesEndpoint>()
+            .MapEndpoint<GetVehicleByIdEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

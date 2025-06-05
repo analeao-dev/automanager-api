@@ -5,7 +5,6 @@ using AutoManager.Core.Requests.Vehicles;
 using AutoManager.Core.Responses;
 using AutoManager.Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace AutoManager.Api.Endpoints.Vehicles;
 

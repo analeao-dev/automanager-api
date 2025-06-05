@@ -1,5 +1,5 @@
 ﻿namespace AutoManager.Core.Requests.Vehicles;
-public class GetVehicleById
+public class GetVehicleByIdRequest
 {
     public int Id { get; set; }
 }

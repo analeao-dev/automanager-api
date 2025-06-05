@@ -85,7 +85,7 @@ public class VehicleService(AppDbContext context) : IVehicleService
         }
     }
 
-    public async Task<Response<Vehicle?>> GetByIdAsync(GetVehicleById request)
+    public async Task<Response<Vehicle?>> GetByIdAsync(GetVehicleByIdRequest request)
     {
         try
         {
