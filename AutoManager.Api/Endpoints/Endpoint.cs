@@ -11,12 +11,13 @@ public static class Endpoint
 
         endpoints.MapGroup("")
             .WithTags("Health Check")
-            .MapGet("/", () => new { message = "OK" });
+            .MapGet("api/v1/status", () => new { message = "OK" });
 
-        endpoints.MapGroup("v1/vehicles")
+        endpoints.MapGroup("/api/v1/vehicles")
             .WithTags("Vehicles")
             .MapEndpoint<CreateVehicleEndpoint>()
-            .MapEndpoint<DeleteVehicleEndpoint>();
+            .MapEndpoint<DeleteVehicleEndpoint>()
+            .MapEndpoint<GetAllVehiclesEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
