@@ -27,4 +27,6 @@ public class UpdateVehicleRequest
     public string? Image { get; set; }
 
     public DateOnly? LastMaintenanceDate { get; set; }
+    
+    public int State { get; set; }
 }

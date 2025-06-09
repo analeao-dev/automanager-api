@@ -23,6 +23,7 @@ public class VehicleService(AppDbContext context) : IVehicleService
                 Mileage = request.Mileage,
                 Image = request.Image,
                 LastMaintenanceDate = request.LastMaintenanceDate,
+                State = request.State,
             };
 
             await context.Vehicles.AddAsync(vehicle);
@@ -53,6 +54,7 @@ public class VehicleService(AppDbContext context) : IVehicleService
             vehicle.Mileage = request.Mileage;
             vehicle.Image = request.Image;
             vehicle.LastMaintenanceDate = request.LastMaintenanceDate;
+            vehicle.State = request.State;
 
             context.Vehicles.Update(vehicle);
             await context.SaveChangesAsync();

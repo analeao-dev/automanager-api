@@ -26,4 +26,7 @@ public class CreateVehicleRequest
     public string? Image { get; set; }
 
     public DateOnly? LastMaintenanceDate { get; set; }
+
+    [Required(ErrorMessage = "Quilometragem do veículo é obrigatório")]
+    public int State { get; set; }
 }
