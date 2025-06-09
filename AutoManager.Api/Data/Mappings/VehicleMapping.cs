@@ -48,6 +48,10 @@ public class VehicleMapping : IEntityTypeConfiguration<Vehicle>
             .IsRequired(false)
             .HasColumnType("DATE");
 
+        builder.Property(v => v.State)
+            .IsRequired(true)
+            .HasColumnType("INT");
+
         builder.Property(v => v.CreatedAt)
             .IsRequired(true);
     }

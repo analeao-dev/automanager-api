@@ -12,5 +12,6 @@ public class Vehicle
     public int? Mileage { get; set; }
     public string? Image { get; set; }
     public DateOnly? LastMaintenanceDate { get; set; }
+    public int State { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }
