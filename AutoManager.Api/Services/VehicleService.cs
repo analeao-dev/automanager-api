@@ -4,6 +4,7 @@ using AutoManager.Core.Requests.Vehicles;
 using AutoManager.Core.Responses;
 using AutoManager.Core.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace AutoManager.Api.Services;
 
@@ -112,7 +113,7 @@ public class VehicleService(AppDbContext context) : IVehicleService
         {
             var query = context.Vehicles
                 .AsNoTracking()
-                .OrderBy(v => v.CreatedAt);
+                .OrderByDescending(v => v.CreatedAt);
 
             var vehicles = await query
                 .Skip((request.PageNumber - 1) * request.PageSize)
@@ -145,6 +146,51 @@ public class VehicleService(AppDbContext context) : IVehicleService
         catch
         {
             return new Response<Vehicle?>(null, 500, "Não foi possível retornar informações do veículo");
+        }
+    }
+
+    public async Task<PagedResponse<List<Vehicle>?>> FilterVehiclesAsync(FilterVehicleRequest request)
+    {
+        try
+        {
+            if (request == null)
+                return new PagedResponse<List<Vehicle>?>(null, 400, "Request não pode ser nulo");
+
+            IQueryable<Vehicle> query = context.Vehicles.AsQueryable().OrderByDescending(v => v.CreatedAt);
+
+            if (!string.IsNullOrWhiteSpace(request.Model))
+            {
+                query = query.Where(v => v.Model.Contains(request.Model));
+            }
+
+            if (request.Brand != null && request.Brand.Any())
+            {
+                query = query.Where(v => request.Brand.Contains(v.Brand));
+            }
+
+
+            if (request.State != null && request.State.Any())
+            {
+                query = query.Where(v => request.State.Contains(v.State));
+            }
+
+            if (request.Type.Any())
+            {
+                query = query.Where(v => v.Type.HasValue && request.Type.Contains(v.Type.Value));
+            }
+
+            var count = await query.CountAsync();
+
+            var vehicles = await query
+            .Skip((request.PageNumber - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .ToListAsync();
+
+            return new PagedResponse<List<Vehicle>?>(vehicles, count, request.PageNumber, request.PageSize);
+        }
+        catch
+        {
+            return new PagedResponse<List<Vehicle>?>(null, 500, "Não foi possível retornar informações do veículo");
         }
     }
 }

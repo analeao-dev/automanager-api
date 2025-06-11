@@ -20,7 +20,8 @@ public static class Endpoint
             .MapEndpoint<GetVehicleByIdEndpoint>()
             .MapEndpoint<GetAllVehiclesEndpoint>()
             .MapEndpoint<DeleteVehicleEndpoint>()
-            .MapEndpoint<GetVehicleByPlateEndpoint>();
+            .MapEndpoint<GetVehicleByPlateEndpoint>()
+            .MapEndpoint<FilterVehiclesEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)

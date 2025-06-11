@@ -9,7 +9,7 @@ namespace AutoManager.Api.Endpoints.Vehicles;
 public class GetVehicleByIdEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-    => app.MapGet("/{id}", HandleAsync)
+    => app.MapGet("/{id:int}", HandleAsync)
             .WithName("Vehicles: GetById")
             .WithSummary("Retorna um veículo por Id")
             .WithDescription("Retorna um veículo por Id")

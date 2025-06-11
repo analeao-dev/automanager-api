@@ -11,4 +11,5 @@ public interface IVehicleService
     Task<Response<Vehicle?>> GetByIdAsync(GetVehicleByIdRequest request);
     Task<Response<Vehicle?>> GetByPlateAsync(GetVehicleByPlateRequest request);
     Task<PagedResponse<List<Vehicle>?>> GetAllAsync(GetAllVehiclesRequest request);
+    Task<PagedResponse<List<Vehicle>?>> FilterVehiclesAsync(FilterVehicleRequest request);
 }
