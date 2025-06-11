@@ -20,7 +20,7 @@ public class UpdateVehicleEndpoint : IEndpoint
     {
         request.Id = id;
 
-        var result = await handler.UpdateAsync(request);
+        var result = await handler.UpdateVehicleAsync(request);
 
         return result.IsSuccess
             ? TypedResults.Ok(result)

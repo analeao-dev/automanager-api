@@ -29,7 +29,7 @@ public class GetAllVehiclesEndpoint : IEndpoint
             PageSize = pageSize,
         };
 
-        var result = await handler.GetAllAsync(request);
+        var result = await handler.GetAllVehiclesAsync(request);
         return result.IsSuccess
             ? TypedResults.Ok(result)
             : TypedResults.BadRequest(result);

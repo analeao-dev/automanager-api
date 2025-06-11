@@ -23,7 +23,7 @@ public class GetVehicleByPlateEndpoint : IEndpoint
             Plate = plate
         };
 
-        var result = await handler.GetByPlateAsync(request);
+        var result = await handler.GetVehicleByPlateAsync(request);
         return result.IsSuccess
             ? TypedResults.Ok(result)
             : TypedResults.BadRequest(result);

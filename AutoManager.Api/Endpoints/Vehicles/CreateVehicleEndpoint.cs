@@ -18,7 +18,7 @@ public class CreateVehicleEndpoint : IEndpoint
 
     private static async Task<IResult> HandleAsync(IVehicleService handler, CreateVehicleRequest request)
     {
-        var response = await handler.CreateAsync(request);
+        var response = await handler.CreateVehicleAsync(request);
         return response.IsSuccess
             ? TypedResults.Created($"v1/vehicles/{response.Data?.Id}", response)
             : TypedResults.BadRequest(response);

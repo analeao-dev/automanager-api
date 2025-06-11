@@ -1,16 +1,14 @@
-﻿using AutoManager.Api.Data;
+﻿using AutoManager.Api.Repositories;
 using AutoManager.Core.Models;
 using AutoManager.Core.Requests.Vehicles;
 using AutoManager.Core.Responses;
 using AutoManager.Core.Services;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace AutoManager.Api.Services;
 
-public class VehicleService(AppDbContext context) : IVehicleService
+public class VehicleService(IVehicleRepository repository) : IVehicleService
 {
-    public async Task<Response<Vehicle?>> CreateAsync(CreateVehicleRequest request)
+    public async Task<Response<Vehicle?>> CreateVehicleAsync(CreateVehicleRequest request)
     {
         try
         {
@@ -27,8 +25,7 @@ public class VehicleService(AppDbContext context) : IVehicleService
                 State = request.State,
             };
 
-            await context.Vehicles.AddAsync(vehicle);
-            await context.SaveChangesAsync();
+            await repository.AddAsync(vehicle);
 
             return new Response<Vehicle?>(vehicle, 201, "Veículo cadastrado com sucesso");
         }
@@ -38,27 +35,28 @@ public class VehicleService(AppDbContext context) : IVehicleService
         }
     }
 
-    public async Task<Response<Vehicle?>> UpdateAsync(UpdateVehicleRequest request)
+    public async Task<Response<Vehicle?>> UpdateVehicleAsync(UpdateVehicleRequest request)
     {
         try
         {
-            var vehicle = await context.Vehicles.FirstOrDefaultAsync(v => v.Id == request.Id);
-
-            if (vehicle is null)
+            if (!await repository.ExistsAsync(request.Id))
                 return new Response<Vehicle?>(null, 404, "Veículo não encontrado");
 
-            vehicle.Plate = request.Plate;
-            vehicle.Type = request.Type;
-            vehicle.Brand = request.Brand;
-            vehicle.Model = request.Model;
-            vehicle.Year = request.Year;
-            vehicle.Mileage = request.Mileage;
-            vehicle.Image = request.Image;
-            vehicle.LastMaintenanceDate = request.LastMaintenanceDate;
-            vehicle.State = request.State;
+            var vehicle = new Vehicle
+            {
+                Id = request.Id,
+                Plate = request.Plate,
+                Type = request.Type,
+                Brand = request.Brand,
+                Model = request.Model,
+                Year = request.Year,
+                Mileage = request.Mileage,
+                Image = request.Image,
+                LastMaintenanceDate = request.LastMaintenanceDate,
+                State = request.State
+            };
 
-            context.Vehicles.Update(vehicle);
-            await context.SaveChangesAsync();
+            await repository.UpdateAsync(vehicle);
 
             return new Response<Vehicle?>(vehicle, 200, "Veículo atualizado com sucesso");
         }
@@ -68,17 +66,16 @@ public class VehicleService(AppDbContext context) : IVehicleService
         }
     }
 
-    public async Task<Response<Vehicle?>> DeleteAsync(DeleteVehicleRequest request)
+    public async Task<Response<Vehicle?>> DeleteVehicleAsync(DeleteVehicleRequest request)
     {
         try
         {
-            var vehicle = await context.Vehicles.FirstOrDefaultAsync(v => v.Id == request.Id);
-
-            if (vehicle is null)
+            var vehicle = await repository.GetByIdAsync(request.Id);
+            
+            if (vehicle == null)
                 return new Response<Vehicle?>(null, 404, "Veículo não encontrado");
 
-            context.Vehicles.Remove(vehicle);
-            await context.SaveChangesAsync();
+            await repository.DeleteAsync(vehicle);
 
             return new Response<Vehicle?>(vehicle, 200, "Veículo exluído com sucesso");
         }
@@ -88,14 +85,11 @@ public class VehicleService(AppDbContext context) : IVehicleService
         }
     }
 
-    public async Task<Response<Vehicle?>> GetByIdAsync(GetVehicleByIdRequest request)
+    public async Task<Response<Vehicle?>> GetVehicleByIdAsync(GetVehicleByIdRequest request)
     {
         try
         {
-            var vehicle = await context.Vehicles
-                .AsNoTracking()
-                .FirstOrDefaultAsync(v => v.Id == request.Id);
-
+            var vehicle = await repository.GetByIdAsync(request.Id);
             if (vehicle is null)
                 return new Response<Vehicle?>(null, 404, "Veículo não encontrado");
 
@@ -107,20 +101,12 @@ public class VehicleService(AppDbContext context) : IVehicleService
         }
     }
 
-    public async Task<PagedResponse<List<Vehicle>?>> GetAllAsync(GetAllVehiclesRequest request)
+    public async Task<PagedResponse<List<Vehicle>?>> GetAllVehiclesAsync(GetAllVehiclesRequest request)
     {
         try
         {
-            var query = context.Vehicles
-                .AsNoTracking()
-                .OrderByDescending(v => v.CreatedAt);
-
-            var vehicles = await query
-                .Skip((request.PageNumber - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .ToListAsync();
-
-            var count = await query.CountAsync();
+            var vehicles = await repository.GetAllAsync(request);
+            var count = vehicles.Count; 
 
             return new PagedResponse<List<Vehicle>?>(vehicles, count, request.PageNumber, request.PageSize);
         }
@@ -130,13 +116,12 @@ public class VehicleService(AppDbContext context) : IVehicleService
         }
     }
 
-    public async Task<Response<Vehicle?>> GetByPlateAsync(GetVehicleByPlateRequest request)
+    public async Task<Response<Vehicle?>> GetVehicleByPlateAsync(GetVehicleByPlateRequest request)
     {
         try
         {
-            var vehicle = await context.Vehicles
-                .AsNoTracking()
-                .FirstOrDefaultAsync(v => v.Plate == request.Plate);
+
+            var vehicle = await repository.GetByPlateAsync(request);
 
             if (vehicle is null)
                 return new Response<Vehicle?>(null, 404, $"Veículo com placa {request.Plate} não encontrado");
@@ -156,35 +141,8 @@ public class VehicleService(AppDbContext context) : IVehicleService
             if (request == null)
                 return new PagedResponse<List<Vehicle>?>(null, 400, "Informe ao menos um parâmetro de busca");
 
-            IQueryable<Vehicle> query = context.Vehicles.AsQueryable().OrderByDescending(v => v.CreatedAt);
-
-            if (!string.IsNullOrWhiteSpace(request.Model))
-            {
-                query = query.Where(v => v.Model.Contains(request.Model));
-            }
-
-            if (request.Brand != null && request.Brand.Any())
-            {
-                query = query.Where(v => request.Brand.Contains(v.Brand));
-            }
-
-
-            if (request.State != null && request.State.Any())
-            {
-                query = query.Where(v => request.State.Contains(v.State));
-            }
-
-            if (request.Type.Any())
-            {
-                query = query.Where(v => v.Type.HasValue && request.Type.Contains(v.Type.Value));
-            }
-
-            var count = await query.CountAsync();
-
-            var vehicles = await query
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToListAsync();
+            var vehicles = await repository.FilterAsync(request);
+            var count = vehicles.Count;
 
             return new PagedResponse<List<Vehicle>?>(vehicles, count, request.PageNumber, request.PageSize);
         }

@@ -23,7 +23,7 @@ public class DeleteVehicleEndpoint : IEndpoint
             Id = id
         };
 
-        var result = await handler.DeleteAsync(request);
+        var result = await handler.DeleteVehicleAsync(request);
         return result.IsSuccess
             ? TypedResults.Ok(result)
             : TypedResults.BadRequest(result);

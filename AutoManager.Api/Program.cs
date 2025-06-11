@@ -1,7 +1,7 @@
 using AutoManager.Api.Data;
 using AutoManager.Api.Endpoints;
+using AutoManager.Api.Repositories;
 using AutoManager.Api.Services;
-using AutoManager.Core;
 using AutoManager.Core.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,8 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<AppDbContext>(options
     => options.UseSqlServer(connectionString));
 
-builder.Services.AddTransient<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddOpenApi();
 
