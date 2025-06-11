@@ -154,7 +154,7 @@ public class VehicleService(AppDbContext context) : IVehicleService
         try
         {
             if (request == null)
-                return new PagedResponse<List<Vehicle>?>(null, 400, "Request não pode ser nulo");
+                return new PagedResponse<List<Vehicle>?>(null, 400, "Informe ao menos um parâmetro de busca");
 
             IQueryable<Vehicle> query = context.Vehicles.AsQueryable().OrderByDescending(v => v.CreatedAt);
 

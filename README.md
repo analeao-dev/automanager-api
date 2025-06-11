@@ -3,20 +3,22 @@
 **AutoManager API** é uma aplicação back-end desenvolvida com **ASP.NET Core Web API (Minimal API)** para gerenciamento de veículos. Essa API RESTful permite o cadastro, listagem, consulta, edição e remoção de veículos.
 
 ## 🖼️ Demonstração
+
 ![tela-api](https://github.com/user-attachments/assets/5639e47d-dcbd-4639-af4d-3a8dd6e1fb2a)
 
 ## 🌐 Endpoints
 
 A API conta com as seguintes rotas:
 
-| Método   | Rota                          | Descrição                          |
-|----------|-------------------------------|------------------------------------|
-| `GET`    | `/api/v1/vehicles`            | Lista todos os veículos            |
-| `GET`    | `/api/v1/vehicles/{id}`       | Retorna um veículo por **ID**      |
-| `GET`    | `/api/v1/vehicles/by-plate/{plate}`| Retorna um veículo por **placa**   |
-| `POST`   | `/api/v1/vehicles`                   | Cadastra um novo veículo           |
-| `PUT`    | `/api/v1/vehicles/{id}`              | Edita um veículo existente         |
-| `DELETE` | `/api/v1/vehicles/{id}`              | Deleta um veículo                  |
+| Método   | Rota                                | Descrição                             |
+| -------- | ----------------------------------- | ------------------------------------- |
+| `GET`    | `/api/v1/vehicles`                  | Lista todos os veículos               |
+| `GET`    | `/api/v1/vehicles/{id}`             | Retorna um veículo por **ID**         |
+| `GET`    | `/api/v1/vehicles/by-plate/{plate}` | Retorna um veículo por **placa**      |
+| `POST`   | `/api/v1/vehicles`                  | Cadastra um novo veículo              |
+| `PUT`    | `/api/v1/vehicles/{id}`             | Edita um veículo existente            |
+| `DELETE` | `/api/v1/vehicles/{id}`             | Deleta um veículo                     |
+| `GET`    | `/api/v1/vehicles/filter`           | Lista veículos com base em parâmetros |
 
 ## 🛠️ Tecnologias
 
@@ -34,3 +36,4 @@ cd AutoManager.API
 
 dotnet restore
 dotnet run
+```
